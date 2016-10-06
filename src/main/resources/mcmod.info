@@ -1,0 +1,16 @@
+[
+{
+  "modid": "ChatotChatbot",
+  "name": "Chatot Discord Chatbot",
+  "description": "Designed to link a minecraft server chat and a discord chat room",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["TaigaCait"],
+  "credits": "Gdude, for running the minecraft server this mod is built for",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
