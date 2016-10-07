@@ -6,7 +6,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
-public class ChatHandler {
+public class MCChatHandler {
 
     public void sendMessage(Message msg) {
 
@@ -22,6 +22,8 @@ public class ChatHandler {
     public void sendMessage(String author, String msg) {
 
         ChatotChatbot.log.info("mcc sendmessage 2");
+        //TODO use ChatUtils to modify format appropriately
+
         sendMessage(new TextComponentString("<" + author + "> : " + msg));
 
     }

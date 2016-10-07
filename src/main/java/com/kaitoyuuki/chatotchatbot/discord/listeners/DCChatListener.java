@@ -2,32 +2,17 @@ package com.kaitoyuuki.chatotchatbot.discord.listeners;
 
 
 import com.kaitoyuuki.chatotchatbot.ChatotChatbot;
-import com.kaitoyuuki.chatotchatbot.discord.bot;
 import com.kaitoyuuki.chatotchatbot.discord.handler.CDCommand;
-import net.dv8tion.jda.JDA;
-import net.dv8tion.jda.JDABuilder;
-import net.dv8tion.jda.entities.Role;
-import net.dv8tion.jda.events.message.MessageEmbedEvent;
+import com.kaitoyuuki.chatotchatbot.minecraft.handler.MCChatHandler;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.events.message.priv.PrivateMessageReceivedEvent;
 import net.dv8tion.jda.events.guild.*;
-import net.dv8tion.jda.events.guild.member.*;
-import net.dv8tion.jda.events.guild.role.*;
 import net.dv8tion.jda.hooks.ListenerAdapter;
-import net.minecraft.server.MinecraftServer;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-
-import javax.security.auth.login.LoginException;
-
-public class ChatListener extends ListenerAdapter {
 
 
-    static JDA jda;
-    static com.kaitoyuuki.chatotchatbot.minecraft.handler.ChatHandler mcc = new com.kaitoyuuki.chatotchatbot.minecraft.handler.ChatHandler();
-    public JDA getJDA() {
+public class DCChatListener extends ListenerAdapter {
 
-        return jda;
-    }
+    static MCChatHandler mcc = new MCChatHandler();
 
     //Joined a new guild(server)
     @Override
@@ -50,7 +35,7 @@ public class ChatListener extends ListenerAdapter {
     // private messages
     @Override
     public void onPrivateMessageReceived(PrivateMessageReceivedEvent event) {
-        ChatotChatbot.log.info(event.getAuthor().getUsername() + " " + event.getMessage().getContent());
+        ChatotChatbot.log.info("[pm]<" + event.getAuthor().getUsername() + ">:" + event.getMessage().getContent());
 
 
     }
@@ -58,10 +43,8 @@ public class ChatListener extends ListenerAdapter {
     //channel messages
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
-        ChatotChatbot.log.info(event.getGuild().getName() + " " + event.getChannel().getName() + " " +
-                event.getAuthor().getUsername() + " " + event.getMessage().getContent());
-        ChatotChatbot.log.info(event.getGuild().getId());
-        ChatotChatbot.log.info(event.getChannel().getId());
+        ChatotChatbot.log.info("[" + event.getGuild().getName() + "][" + event.getChannel().getName() + "]<" +
+                event.getAuthor().getUsername() + ">:" + event.getMessage().getContent());
         if (event.getGuild().getId().equals(ChatotChatbot.GID)) {
             if (event.getChannel().getId().equals(ChatotChatbot.CID)) {
                 if(event.getMessage().getContent().startsWith(ChatotChatbot.PREFIX)) {

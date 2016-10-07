@@ -2,13 +2,10 @@ package com.kaitoyuuki.chatotchatbot;
 
 
 import com.kaitoyuuki.chatotchatbot.discord.bot;
-import com.kaitoyuuki.chatotchatbot.discord.listeners.ChatListener;
-import com.kaitoyuuki.chatotchatbot.minecraft.listeners.chatListener;
-import net.dv8tion.jda.JDA;
+import com.kaitoyuuki.chatotchatbot.minecraft.listeners.MCChatListener;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
-import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.event.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,9 +21,13 @@ public class ChatotChatbot {
     public static String GID;
     public static String CID;
     public static String PREFIX;
+    public static String DCFORMAT;
+    public static String MCFORMAT;
 
     public static Logger log = LogManager.getLogger(MODID);
 
+
+    //TODO test user mentions, role mentions, channel mentions, and emoji
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
@@ -34,7 +35,7 @@ public class ChatotChatbot {
         log.info("Chatot, cha chatot!");
         CCConfig.init(event.getSuggestedConfigurationFile());
         if (ENABLED) {
-            MinecraftForge.EVENT_BUS.register(new chatListener());
+            MinecraftForge.EVENT_BUS.register(new MCChatListener());
             log.info("Cha Chatot tot! Connecting to Discord!");
             bot.runThread();
 
@@ -48,10 +49,12 @@ public class ChatotChatbot {
     @Mod.EventHandler
     public void serverStarting(FMLServerStartingEvent event) {
 
+        //should really move the bot startup here, I think
     }
 
     @Mod.EventHandler
     public void serverStopping(FMLServerStoppingEvent event) {
+
         bot.shutdown();
     }
 

@@ -2,7 +2,7 @@ package com.kaitoyuuki.chatotchatbot.discord;
 
 
 import com.kaitoyuuki.chatotchatbot.ChatotChatbot;
-import com.kaitoyuuki.chatotchatbot.discord.listeners.ChatListener;
+import com.kaitoyuuki.chatotchatbot.discord.listeners.DCChatListener;
 import net.dv8tion.jda.JDA;
 import net.dv8tion.jda.JDABuilder;
 import net.dv8tion.jda.MessageBuilder;
@@ -16,7 +16,7 @@ import javax.security.auth.login.LoginException;
 
 public class bot implements Runnable{
 
-    public static ChatListener listener;
+    public static DCChatListener listener;
     public static Thread thread;
     public static bot instance;
 
@@ -52,7 +52,7 @@ public class bot implements Runnable{
                 jda = new JDABuilder()
                         .setBulkDeleteSplittingEnabled(false)
                         .setBotToken(ChatotChatbot.TOKEN)
-                        .addListener(listener = new ChatListener())
+                        .addListener(listener = new DCChatListener())
                         .buildBlocking();
                 channel = jda.getTextChannelById(ChatotChatbot.CID);
             } catch (LoginException e) {
