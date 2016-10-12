@@ -11,6 +11,10 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import org.apache.logging.log4j.Logger;
 
+import static com.kaitoyuuki.chatotchatbot.minecraft.ChatUtils.formatMCforMC;
+import static com.kaitoyuuki.chatotchatbot.minecraft.ChatUtils.stripAmp;
+import static com.kaitoyuuki.chatotchatbot.minecraft.ChatUtils.stripFormat;
+
 @SuppressWarnings("unused")
 public class MCChatListener {
 
@@ -21,9 +25,14 @@ public class MCChatListener {
         String player = event.getPlayer().getDisplayNameString();
         String message = event.getMessage();
 
-        //String modify = "<lol> umad bro";
-        //event.setComponent(new TextComponentString(modify));
         //TODO pass chat through ChatUtils to modify appearance appropriately
+        if (ChatotChatbot.override) {
+            event.setComponent(new TextComponentString(formatMCforMC(event)));
+        }
+        //removes all minecraft formatting sets (ampersand and section sign) before passing to discord.
+        //this should eventually be replaced, and probably won't be helpful
+        message = stripFormat(message);
+        message = stripAmp(message);
         String dcM = "**" + player + ":** " + message + "";
         lg.debug(dcM);
         bot.instance.sendMessage(dcM);
@@ -33,7 +42,7 @@ public class MCChatListener {
     @SubscribeEvent
     public void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
         String player = event.player.getDisplayNameString();
-        String dcM = "***" + player + "** has joined the game*";
+        String dcM = "_**" + player + "** has joined the game_";
         lg.debug(dcM);
         bot.instance.sendMessage(dcM);
     }
@@ -41,7 +50,7 @@ public class MCChatListener {
     @SubscribeEvent
     public void onPlayerQuit(PlayerEvent.PlayerLoggedOutEvent event) {
         String player = event.player.getDisplayNameString();
-        String dcM = "***" + player + "** has left the game*";
+        String dcM = "_**" + player + "** has left the game_";
         lg.debug(dcM);
         bot.instance.sendMessage(dcM);
     }
@@ -53,7 +62,7 @@ public class MCChatListener {
             EntityPlayer player = (EntityPlayer)event.getEntityLiving();
             String ded = player.getDisplayNameString();
             String death = player.getCombatTracker().getDeathMessage().getUnformattedText();
-            String dcM = "***" + ded + "** " + death + "*";
+            String dcM = "_**" + ded + "** " + death + "_";
             lg.debug(dcM);
             bot.instance.sendMessage(dcM);
 

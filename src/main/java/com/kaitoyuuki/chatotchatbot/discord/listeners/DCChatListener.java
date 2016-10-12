@@ -2,12 +2,15 @@ package com.kaitoyuuki.chatotchatbot.discord.listeners;
 
 
 import com.kaitoyuuki.chatotchatbot.ChatotChatbot;
+import com.kaitoyuuki.chatotchatbot.discord.bot;
 import com.kaitoyuuki.chatotchatbot.discord.handler.CDCommand;
 import com.kaitoyuuki.chatotchatbot.minecraft.handler.MCChatHandler;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.events.message.priv.PrivateMessageReceivedEvent;
 import net.dv8tion.jda.events.guild.*;
 import net.dv8tion.jda.hooks.ListenerAdapter;
+
+import static com.kaitoyuuki.chatotchatbot.minecraft.ChatUtils.formatDCforMC;
 
 
 public class DCChatListener extends ListenerAdapter {
@@ -50,8 +53,9 @@ public class DCChatListener extends ListenerAdapter {
                 if(event.getMessage().getContent().startsWith(ChatotChatbot.PREFIX)) {
                     CDCommand.handle(event.getChannel(), event.getAuthor(), event.getMessage().getContent().substring(1));
 
-                } else if (!(event.getAuthor().isBot())) {
-                    mcc.sendMessage(event.getMessage());
+                } else if (!(event.getAuthor().equals(bot.instance.getMe()))) {
+
+                    mcc.sendMessage(event);
                 }
             }
         }

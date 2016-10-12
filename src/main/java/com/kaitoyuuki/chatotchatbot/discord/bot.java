@@ -22,6 +22,7 @@ public class bot implements Runnable{
 
     public static MessageChannel channel;
     public static JDA jda;
+    private static User me;
 
     public static void runThread() {
         if (thread == null) {
@@ -76,6 +77,7 @@ public class bot implements Runnable{
                     ChatotChatbot.ENABLED = false;
                     return;
                 }
+                me = jda.getUserById(jda.getSelfInfo().getId());
             }
         } catch (Throwable t) {
             ChatotChatbot.log.error("Chirp chirrup, something went wrong...", t);
@@ -85,7 +87,7 @@ public class bot implements Runnable{
     }
 
     public void sendMessage(String player, String msg) {
-        ChatotChatbot.log.info("dcc sendmessage 1");
+        ChatotChatbot.log.debug("dcc sendmessage 1");
         MessageBuilder mb = new MessageBuilder();
         mb.appendString("**" + player + ":**");
         mb.appendString("*" + msg + "*");
@@ -95,7 +97,7 @@ public class bot implements Runnable{
 
     public void sendMessage(User user, String msg) {
 
-        ChatotChatbot.log.info("dcc sendmessage 2");
+        ChatotChatbot.log.debug("dcc sendmessage 2");
         MessageBuilder mb = new MessageBuilder();
         mb.appendMention(user);
         mb.appendString(msg);
@@ -104,11 +106,21 @@ public class bot implements Runnable{
     }
     public void sendMessage(String msg) {
 
-        ChatotChatbot.log.info("dcc sendmessage 3");
+        ChatotChatbot.log.debug("dcc sendmessage 3");
         MessageBuilder mb = new MessageBuilder();
         mb.appendString(msg);
         Message message = mb.build();
         channel.sendMessage(message);
+    }
+    public void sendPM(User user, String msg) {
+        MessageBuilder mb = new MessageBuilder();
+        mb.appendString(msg);
+        Message message = mb.build();
+        user.getPrivateChannel().sendMessage(message);
+    }
+
+    public User getMe() {
+        return me;
     }
 
 }

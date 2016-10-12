@@ -23,6 +23,8 @@ public class ChatotChatbot {
     public static String PREFIX;
     public static String DCFORMAT;
     public static String MCFORMAT;
+    public static String DCtoMCFORMAT;
+    public static boolean override;
 
     public static Logger log = LogManager.getLogger(MODID);
 
@@ -55,6 +57,7 @@ public class ChatotChatbot {
     @Mod.EventHandler
     public void serverStopping(FMLServerStoppingEvent event) {
 
+        //may or may not be important, but I'll have my cleanup code, damnit!
         bot.shutdown();
     }
 
