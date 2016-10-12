@@ -1,7 +1,7 @@
 package com.kaitoyuuki.chatotchatbot.discord.handler;
 
 import com.kaitoyuuki.chatotchatbot.ChatotChatbot;
-import com.kaitoyuuki.chatotchatbot.discord.bot;
+import com.kaitoyuuki.chatotchatbot.discord.Bot;
 import net.dv8tion.jda.Permission;
 import net.dv8tion.jda.entities.TextChannel;
 import net.dv8tion.jda.entities.User;
@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class CDCommand {
 
-    private static Map<String, Handler> commands = new HashMap<String, Handler>();
+    private static Map<String, Handler> commands = new HashMap<>();
 
     static {
         register("online", new Handler() {
@@ -34,19 +34,19 @@ public class CDCommand {
             @Override
             public void handle(TextChannel channel, User sender, String[] args) {
                 if(channel.checkPermission(sender, Permission.BAN_MEMBERS)) {
-                    if( ChatotChatbot.override) {
-                        ChatotChatbot.override = false;
+                    if( ChatotChatbot.config.doesOverride()) {
+                        ChatotChatbot.config.setOverride(false);
                         ChatotChatbot.log.error("Chirpy chirp! Something must have gone wrong, as " + sender.getUsername() +
                                 " has asked me to disable minecraft chat formatting. Maybe take a look inside me to see what happened.");
                         ChatotChatbot.log.error("In order to turn minecraft chat formatting back on, please edit the config file" +
                                 " and restart.");
-                        bot.instance.sendMessage(sender, ", I've stopped formatting minecraft chat, chirrup! Everything is...");
-                        bot.instance.sendMessage("so *plain...*:cry:");
+                        Bot.instance.sendMessage(sender, ", I've stopped formatting minecraft chat, chirrup! Everything is...");
+                        Bot.instance.sendMessage("so *plain...*:cry:");
                     } else {
-                        bot.instance.sendMessage(sender, ":bird:");
+                        Bot.instance.sendMessage(sender, ":bird:");
                     }
                 } else {
-                    bot.instance.sendMessage(sender, ":bird:");
+                    Bot.instance.sendMessage(sender, ":bird:");
                 }
 
             }
@@ -54,15 +54,15 @@ public class CDCommand {
         register("help", new Handler() {
             @Override
             public void handle(TextChannel channel, User sender, String[] args) {
-                bot.instance.sendMessage(sender, ":mailbox_with_mail:");
-                bot.instance.sendPM(sender, "Current commands: ");
-                bot.instance.sendPM(sender, "online: tells you who is on the minecraft server");
+                Bot.instance.sendMessage(sender, ":mailbox_with_mail:");
+                Bot.instance.sendPM(sender, "Current commands: ");
+                Bot.instance.sendPM(sender, "online: tells you who is on the minecraft server");
                 if(channel.checkPermission(sender, Permission.BAN_MEMBERS)) {
-                    bot.instance.sendPM(sender, "stopformat: emergency stop for the minecraft formatting override." +
+                    Bot.instance.sendPM(sender, "stopformat: emergency stop for the minecraft formatting override." +
                             " This only effects the formatting for in-game messages, not for messages sent from discord."
                             );
                 }
-                bot.instance.sendPM(sender, "That's all I can do right now, chirp chirrup! :bird:");
+                Bot.instance.sendPM(sender, "That's all I can do right now, chirp chirrup! :bird:");
 
 
             }
@@ -70,7 +70,7 @@ public class CDCommand {
         });
     }
 
-    public static void register(String name, Handler handler) {
+    private static void register(String name, Handler handler) {
         commands.put(name, handler);
     }
 
@@ -84,7 +84,7 @@ public class CDCommand {
         }
     }
 
-    public interface Handler {
+    interface Handler {
         void handle(TextChannel channel, User sender, String[] args);
     }
 
