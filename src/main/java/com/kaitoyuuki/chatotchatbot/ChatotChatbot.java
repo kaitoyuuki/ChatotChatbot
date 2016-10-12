@@ -1,7 +1,7 @@
 package com.kaitoyuuki.chatotchatbot;
 
 
-import com.kaitoyuuki.chatotchatbot.discord.bot;
+import com.kaitoyuuki.chatotchatbot.discord.Bot;
 import com.kaitoyuuki.chatotchatbot.minecraft.listeners.MCChatListener;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
@@ -16,17 +16,10 @@ public class ChatotChatbot {
     public static final String MODID = "chatotchatbot";
     public static final String VERSION = "1.0";
 
-    public static boolean ENABLED;
-    public static String TOKEN;
-    public static String GID;
-    public static String CID;
-    public static String PREFIX;
-    public static String DCFORMAT;
-    public static String MCFORMAT;
-    public static String DCtoMCFORMAT;
-    public static boolean override;
+    public static CCConfig config;
 
     public static Logger log = LogManager.getLogger(MODID);
+
 
 
     //TODO test user mentions, role mentions, channel mentions, and emoji
@@ -35,8 +28,14 @@ public class ChatotChatbot {
     public void preInit(FMLPreInitializationEvent event) {
 
         log.info("Chatot, cha chatot!");
-        CCConfig.init(event.getSuggestedConfigurationFile());
+        config = new CCConfig(event.getSuggestedConfigurationFile());
+        if(config.isENABLED()) {
+            MinecraftForge.EVENT_BUS.register(new MCChatListener());
+            log.info("Registering listeners, chacha!");
 
+        } else {
+            log.warn("Chatot has not been configured. Please edit the config file and reload.");
+        }
 
 
     }
@@ -44,10 +43,9 @@ public class ChatotChatbot {
     @Mod.EventHandler
     public void serverStarting(FMLServerStartingEvent event) {
 
-        if(ENABLED) {
-            MinecraftForge.EVENT_BUS.register(new MCChatListener());
+        if(config.isENABLED()) {
             log.info("Cha Chatot tot! Connecting to Discord!");
-            bot.runThread();
+            Bot.runThread(config);
 
         } else {
             log.warn("Chatot has not been configured. Please edit the config file and reload.");
@@ -58,7 +56,7 @@ public class ChatotChatbot {
     public void serverStopping(FMLServerStoppingEvent event) {
 
         //may or may not be important, but I'll have my cleanup code, damnit!
-        bot.shutdown();
+        Bot.instance.shutdown();
     }
 
 
