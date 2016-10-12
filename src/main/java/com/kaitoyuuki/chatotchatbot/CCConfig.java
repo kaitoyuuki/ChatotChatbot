@@ -1,5 +1,4 @@
 package com.kaitoyuuki.chatotchatbot;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.config.Configuration;
 
 import java.io.File;
@@ -22,7 +21,7 @@ public class CCConfig {
          + "Tags: %1$s: minecraft display name %2$s: chat message");
 
         ChatotChatbot.override = config.getBoolean("overrideMCChat","CHAT", false, "Should the bot override default minecraft" +
-                "chat formatting? note, this only applies to messages sent by players from within the game.");
+                " chat formatting? note, this only applies to messages sent by players from within the game.");
         ChatotChatbot.MCFORMAT = config.getString("format", "CHAT", "&f<&3%1$s&r&f>&r %2$s", "formatting "
             + "for messages sent within minecraft chat. Tags: %1$s: user display name "
             + "%2$s: for the message the user sent.");
