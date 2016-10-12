@@ -36,14 +36,7 @@ public class ChatotChatbot {
 
         log.info("Chatot, cha chatot!");
         CCConfig.init(event.getSuggestedConfigurationFile());
-        if (ENABLED) {
-            MinecraftForge.EVENT_BUS.register(new MCChatListener());
-            log.info("Cha Chatot tot! Connecting to Discord!");
-            bot.runThread();
 
-        } else {
-            log.warn("Chatot has not been configured. Please edit the config file and reload.");
-        }
 
 
     }
@@ -51,7 +44,14 @@ public class ChatotChatbot {
     @Mod.EventHandler
     public void serverStarting(FMLServerStartingEvent event) {
 
-        //should really move the bot startup here, I think
+        if(ENABLED) {
+            MinecraftForge.EVENT_BUS.register(new MCChatListener());
+            log.info("Cha Chatot tot! Connecting to Discord!");
+            bot.runThread();
+
+        } else {
+            log.warn("Chatot has not been configured. Please edit the config file and reload.");
+        }
     }
 
     @Mod.EventHandler
