@@ -1,6 +1,7 @@
 package com.kaitoyuuki.chatotchatbot.discord;
 
 
+import com.kaitoyuuki.chatotchatbot.CCConfig;
 import com.kaitoyuuki.chatotchatbot.ChatotChatbot;
 import com.kaitoyuuki.chatotchatbot.discord.listeners.DCChatListener;
 import net.dv8tion.jda.JDA;
@@ -14,74 +15,67 @@ import net.dv8tion.jda.entities.User;
 import javax.security.auth.login.LoginException;
 
 
-public class bot implements Runnable{
+public class Bot implements Runnable{
 
     public static DCChatListener listener;
     public static Thread thread;
-    public static bot instance;
+    public static Bot instance;
 
     public static MessageChannel channel;
     public static JDA jda;
     private static User me;
+    private static CCConfig config;
 
-    public static void runThread() {
+    public static void runThread(CCConfig c) {
         if (thread == null) {
-            thread = new Thread(new bot());
+            thread = new Thread(new Bot());
             thread.start();
+            config = c;
         } else {
             ChatotChatbot.log.error("JDA thread is already running!");
         }
     }
 
 
-    public bot() {
+    public Bot() {
 
         instance = this;
 
     }
 
-    public static void shutdown() {
 
-        ChatotChatbot.log.info("Chirp chirroo, time for me to sleep~!");
-        jda.shutdown();
-
-    }
     @Override
     public void run() {
         try {
             try {
                 jda = new JDABuilder()
                         .setBulkDeleteSplittingEnabled(false)
-                        .setBotToken(ChatotChatbot.TOKEN)
+                        .setBotToken(ChatotChatbot.config.getTOKEN())
                         .addListener(listener = new DCChatListener())
                         .buildBlocking();
-                channel = jda.getTextChannelById(ChatotChatbot.CID);
-            } catch (LoginException e) {
+                channel = jda.getTextChannelById(ChatotChatbot.config.getCID());
+            } catch (LoginException | IllegalArgumentException e) {
                 ChatotChatbot.log.error("Invalid login credentials for Discord, disabling Chatot", e);
-                ChatotChatbot.ENABLED = false;
+                ChatotChatbot.config.setENABLED(false);
                 return;
-            } catch (IllegalArgumentException e) {
-                ChatotChatbot.log.error("Invalid login credentials for Discord, disabling Chatot", e);
-                ChatotChatbot.ENABLED = false;
-                return;
-            }catch (InterruptedException e) {
+            } catch (InterruptedException e) {
                 ChatotChatbot.log.error("Couldn't complete login, disabling Chatot");
                 e.printStackTrace();
-                ChatotChatbot.ENABLED = false;
+                ChatotChatbot.config.setENABLED(false);
                 return;
             }
             if (jda != null) {
-                Guild server = jda.getGuildById(ChatotChatbot.GID);
+                Guild server = jda.getGuildById(ChatotChatbot.config.getGID());
                 if (server == null) {
                     ChatotChatbot.log.error("Chirp chirrup, I can't seem to find that server. Maybe check the ID in the config file?");
-                    ChatotChatbot.ENABLED = false;
+                    ChatotChatbot.config.setENABLED(false);
                     return;
                 }
                 me = jda.getUserById(jda.getSelfInfo().getId());
             }
         } catch (Throwable t) {
             ChatotChatbot.log.error("Chirp chirrup, something went wrong...", t);
-            ChatotChatbot.ENABLED = false;
+            ChatotChatbot.config.setENABLED(false);
         }
 
     }
@@ -121,6 +115,13 @@ public class bot implements Runnable{
 
     public User getMe() {
         return me;
+    }
+
+    public void shutdown() {
+
+        ChatotChatbot.log.info("Chirp chirroo, time for me to sleep~!");
+        jda.shutdown();
+
     }
 
 }
