@@ -1,6 +1,6 @@
 [
 {
-  "modid": "ChatotChatbot",
+  "modid": "chatotchatbot",
   "name": "Chatot Discord Chatbot",
   "description": "Designed to link a minecraft server chat and a discord chat room",
   "version": "${version}",
