@@ -56,12 +56,12 @@ public class Bot implements Runnable{
                 channel = jda.getTextChannelById(ChatotChatbot.config.getCID());
             } catch (LoginException | IllegalArgumentException e) {
                 ChatotChatbot.log.error("Invalid login credentials for Discord, disabling Chatot", e);
-                ChatotChatbot.config.setENABLED(false);
+                config.setENABLED(false);
                 return;
             } catch (InterruptedException e) {
                 ChatotChatbot.log.error("Couldn't complete login, disabling Chatot");
                 e.printStackTrace();
-                ChatotChatbot.config.setENABLED(false);
+                config.setENABLED(false);
                 return;
             }
             if (jda != null) {
@@ -75,7 +75,7 @@ public class Bot implements Runnable{
             }
         } catch (Throwable t) {
             ChatotChatbot.log.error("Chirp chirrup, something went wrong...", t);
-            ChatotChatbot.config.setENABLED(false);
+            config.setENABLED(false);
         }
 
     }
