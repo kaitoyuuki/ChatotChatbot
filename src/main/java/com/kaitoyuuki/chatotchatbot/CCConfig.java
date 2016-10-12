@@ -18,7 +18,7 @@ public class CCConfig {
         ChatotChatbot.CID = config.getString("channelID", "JDA", "", "the channel for the discord bot to work on");
         ChatotChatbot.PREFIX = config.getString("prefix", "JDA", "!", "the command prefix for the discord bot commands");
         ChatotChatbot.DCFORMAT = config.getString("format", "JDA", "**%1$s:** %2$s", "formatting for minecraft messages" +
-                "to be displayed on the discord server. "
+                " to be displayed on the discord server. "
          + "Tags: %1$s: minecraft display name %2$s: chat message");
 
         ChatotChatbot.override = config.getBoolean("overrideMCChat","CHAT", false, "Should the bot override default minecraft" +
