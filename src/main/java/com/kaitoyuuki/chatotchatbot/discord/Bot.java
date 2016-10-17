@@ -46,7 +46,7 @@ public class Bot implements Runnable{
 
     @Override
     public void run() {
-        try {
+
             try {
                 jda = new JDABuilder()
                         .setBulkDeleteSplittingEnabled(false)
@@ -73,10 +73,7 @@ public class Bot implements Runnable{
                 }
                 me = jda.getUserById(jda.getSelfInfo().getId());
             }
-        } catch (Throwable t) {
-            ChatotChatbot.log.error("Chirp chirrup, something went wrong...", t);
-            config.setENABLED(false);
-        }
+
 
     }
 
