@@ -10,9 +10,11 @@ buildscript {
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.3'
     }
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'com.github.johnrengelman.shadow'
 
 /*
 // for people who want stable - not yet functional for MC 1.8.8 - we require the forgegradle 2.1 snapshot
@@ -40,10 +42,16 @@ minecraft {
     // simply re-run your setup task after changing the mappings to update your workspace.
     mappings = "snapshot_20160518"
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
+
 }
+
+srcCompat = JavaVersion.VERSION_1_8
+targetCompat = JavaVersion.VERSION_1_8
+
 repositories {
     jcenter()
 }
+
 dependencies {
     // you may put jars on which you depend on in ./libs
     // or you may define them like so..
@@ -66,7 +74,17 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 
-    compile 'net.dv8tion:JDA:2.2.1_353'
+    compile ('net.dv8tion:JDA:2.2.1_353') {
+        // we don't want junit as runtime dependency, it's unneeded
+        exclude group: 'junit', module: 'junit'
+
+        // remove the exludes to include audio libs
+        exclude group: 'jflac', module: 'jflac'
+        exclude group: 'net.sourceforge.jaadec', module: 'jaad'
+        exclude group: 'org.tritonus', module: 'tritonus-dsp'
+        exclude group: 'com.googlecode.soundlibs', module: 'tritonus-share'
+        exclude group: 'com.googlecode.soundlibs', module: 'mp3spi'
+    }
 }
 
 processResources
@@ -87,6 +105,43 @@ processResources
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
+}
+
+shadowJar {
+    classifier = ''
+    relocate 'com.mashape.unirest', 'com.github.duke605.dce.relocate.com.mashape.unirest'
+    relocate 'com.neovisionaries.ws.client', 'com.github.duke605.dce.relocate.com.neovisionaries.ws.client'
+    relocate 'com.sun.jna', 'com.github.duke605.dce.relocate.com.sun.jna'
+    relocate 'net.dv8tion.jda', 'com.github.duke605.dce.relocate.net.dv8tion.jda'
+    relocate 'org.apache.commons.codec', 'com.github.duke605.dce.relocate.org.apache.commons.codec'
+    relocate 'org.apache.commons.lang3', 'com.github.duke605.dce.relocate.org.apache.commons.lang3'
+    relocate 'org.json', 'com.github.duke605.dce.relocate.org.json'
+    relocate 'org.apache.http', 'com.github.duke605.dce.relocate.org.apache.http'
+    relocate 'org.apache.commons.logging', 'com.github.duke605.dce.relocate.org.apache.commons.logging'
+    relocate 'com.iwebpp.crypto', 'com.github.duke605.dce.relocate.com.iwebpp.crypto'
+    relocate 'com.mixpanel', 'com.github.duke605.dce.relocate.com.mixpanel'
+
+    // remove the exludes to include files required for audio
+    exclude 'natives/'
+    exclude 'tomp2p/opuswrapper/'
+    exclude 'org/tritonus/'
+
+    // uncomment the following lines to also relocate the audio libs if included
+    // relocate 'javax.sound', 'com.github.duke605.dce.relocate.javax.sound'
+    // relocate 'tomp2p.opuswrapper', 'com.github.duke605.dce.relocate.tomp2p.opuswrapper'
+    // relocate 'net.sourceforge.jaad', 'com.github.duke605.dce.relocate.net.sourceforge.jaad'
+    // relocate 'javazoom', 'com.github.duke605.dce.relocate.javazoom'
+    // relocate 'org.kc7bfi.jflac', 'com.github.duke605.dce.relocate.org.kc7bfi.jflac'
+    // relocate 'org.tritonus', 'com.github.duke605.dce.relocate.org.tritonus'
+}
+
+jar {
+    dependsOn shadowJar
+    enabled = false
+}
+
+artifacts {
+    archives shadowJar
 }
 
 idea { module { inheritOutputDirs = true } }
