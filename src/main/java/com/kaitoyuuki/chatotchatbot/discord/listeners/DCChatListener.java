@@ -6,8 +6,6 @@ import com.kaitoyuuki.chatotchatbot.discord.Bot;
 import com.kaitoyuuki.chatotchatbot.discord.handler.CDCommand;
 import com.kaitoyuuki.chatotchatbot.minecraft.handler.MCChatHandler;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.events.message.priv.PrivateMessageReceivedEvent;
-import net.dv8tion.jda.events.guild.*;
 import net.dv8tion.jda.hooks.ListenerAdapter;
 
 
@@ -18,8 +16,6 @@ public class DCChatListener extends ListenerAdapter {
     //channel messages
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
-        ChatotChatbot.log.info("[" + event.getGuild().getName() + "][" + event.getChannel().getName() + "]<" +
-                event.getAuthor().getUsername() + ">:" + event.getMessage().getContent());
         if (event.getGuild().getId().equals(ChatotChatbot.config.getGID())) {
             if (event.getChannel().getId().equals(ChatotChatbot.config.getCID())) {
                 if (!(event.getAuthor().equals(Bot.instance.getMe()))) {

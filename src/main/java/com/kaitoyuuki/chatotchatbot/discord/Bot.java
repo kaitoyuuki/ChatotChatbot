@@ -13,6 +13,7 @@ import net.dv8tion.jda.entities.MessageChannel;
 import net.dv8tion.jda.entities.User;
 
 import javax.security.auth.login.LoginException;
+import java.util.regex.Pattern;
 
 
 public class Bot implements Runnable{
@@ -80,11 +81,14 @@ public class Bot implements Runnable{
     public void sendMessage(String player, String msg) {
         ChatotChatbot.log.debug("dcc sendmessage 1");
         MessageBuilder mb = new MessageBuilder();
-        mb.appendString("**" + player + ":**");
-        mb.appendString("*" + msg + "*");
+
+        mb.appendString(player + ":", MessageBuilder.Formatting.BOLD);
+        mb.appendString(msg);
+
         channel.sendMessage(mb.build());
 
     }
+
 
     public void sendMessage(User user, String msg) {
 
