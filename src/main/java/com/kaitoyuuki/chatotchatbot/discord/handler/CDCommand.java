@@ -78,7 +78,7 @@ public class CDCommand {
         String[] bits = command.split(" ");
         if(bits.length <= 0) return;
         String name = bits[0];
-        if(commands.containsKey(name)) {
+        if(commands.containsKey(name.toLowerCase())) {
             String[] args = Arrays.copyOfRange(bits, 1, bits.length);
             commands.get(name).handle(channel, sender, args);
         }
