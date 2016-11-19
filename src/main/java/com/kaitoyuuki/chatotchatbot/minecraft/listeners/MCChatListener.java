@@ -29,7 +29,6 @@ public class MCChatListener {
         String player = event.getPlayer().getDisplayNameString();
         String message = event.getMessage();
 
-        //TODO pass chat through ChatUtils to modify appearance appropriately
         if (ChatotChatbot.config.doesOverride()) {
             event.setComponent(new TextComponentString(formatMCforMC(event)));
         }
@@ -84,8 +83,10 @@ public class MCChatListener {
                 ITextComponent itextcomponent = getChatComponentFromNthArg(event.getSender(), event.getParameters(), 0, !(event.getSender() instanceof EntityPlayer));
                 TextComponentTranslation tct = new TextComponentTranslation("chat.type.emote", event.getSender().getDisplayName(), itextcomponent);
                 String emote = tct.getUnformattedText();
-
-                String dcM = "_" + emote + "_";
+                //TODO test this garbage lol.
+                String player = event.getSender().getDisplayName().getUnformattedText();
+                String msg = itextcomponent.getUnformattedText();
+                String dcM = "_" + player.replace("_", "\\_") + " " + msg + "_";
                 lg.debug(dcM);
                 Bot.instance.sendMessage(dcM);
 
